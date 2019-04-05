@@ -28,6 +28,7 @@ import javax.management.remote.JMXServiceURL;
  * JMX interface for values
  *
  * @author David Gildeh (www.outlyer.com)
+ * @author Nate Werner (umn.edu)
  */
 public class JMXConnector {
 
@@ -69,6 +70,7 @@ public class JMXConnector {
             if (WLpassword.equals("ENV")) {
               WLpassword = System.getenv("JMX_PASSWORD");
             }
+            // Implemented special JMX connection logic for Weblogic and Tuxedo rmi servers
             if (url.indexOf("weblogic") > 0) {
                // Weblogic specific formatting
                env.put(JMXConnectorFactory.PROTOCOL_PROVIDER_PACKAGES, "weblogic.management.remote");
