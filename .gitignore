@@ -1,0 +1,15 @@
+.DS_Store
+build/
+buildjar/
+dist/
+nbproject/
+nbbuild.xml
+build.xml
+lib/
+out/
+target/
+.idea/
+*.iml
+nbactions.xml
+*.log
+MANIFEST
