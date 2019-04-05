@@ -16,6 +16,7 @@ import com.facebook.nailgun.NGContext;
  * JMXQuery is used for remote request of JMX attributes
  *
  * @author David Gildeh (www.outlyer.com)
+ * @author Nate Werner (umn.edu)
  *
  */
 public class JMXQuery {
@@ -29,13 +30,16 @@ public class JMXQuery {
     String username = null;
     String password = null;
 
+    // implemented the NailGun Main instead of regular main.
     // Special Nailgun server entry point
     public static void nailMain(NGContext context) throws Exception  {
         JMXQuery query = new JMXQuery();
         query.ngContext = context;
         String[] args = context.getArgs();
         query.parse(args);
-
+        // Stripped out the JSON option, and only return JSON
+        // Removed Help and JDK VM options
+        
         // Initialise JMX Connection
         try {
             query.connector = new JMXConnector(query.url, query.username, query.password);
