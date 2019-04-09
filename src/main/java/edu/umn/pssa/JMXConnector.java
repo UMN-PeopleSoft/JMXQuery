@@ -22,6 +22,7 @@ import javax.management.openmbean.InvalidKeyException;
 import javax.management.openmbean.TabularDataSupport;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
+import javax.management.JMRuntimeException;
 
 /**
  * Connection class with utility functions for querying the JVM
@@ -133,7 +134,7 @@ public class JMXConnector {
      * @throws javax.management.ReflectionException
      */
     private ArrayList<JMXMetric> getMetrics(JMXMetric metricQuery) throws IOException,
-            MalformedObjectNameException, InstanceNotFoundException, IntrospectionException, ReflectionException {
+            MalformedObjectNameException, InstanceNotFoundException, IntrospectionException, ReflectionException, JMRuntimeException  {
 
         ArrayList<JMXMetric> metrics = new ArrayList<JMXMetric>();
 
@@ -181,6 +182,16 @@ public class JMXConnector {
                     }
                 }
             } catch (NullPointerException e) {
+                attributeMetric.setAttributeType(null);
+                attributeMetric.setValue(null);
+                metrics.add(attributeMetric);
+            } catch (JMRuntimeException e) {
+                // PeopleSoft App servers seems to have faults MBeans, gracefully handle missing MBeanInfo
+                attributeMetric= new JMXMetric(metricQuery.getmBeanName().toString(),
+                                                    metricQuery.getAttribute(),
+                                                    null);
+                attributeMetric.setmetricName(metricQuery.getmetricName());
+                attributeMetric.setmetricLabels(metricQuery.getmetricLabels());
                 attributeMetric.setAttributeType(null);
                 attributeMetric.setValue(null);
                 metrics.add(attributeMetric);
