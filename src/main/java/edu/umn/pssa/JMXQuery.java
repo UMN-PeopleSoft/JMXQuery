@@ -36,7 +36,13 @@ public class JMXQuery {
         JMXQuery query = new JMXQuery();
         query.ngContext = context;
         String[] args = context.getArgs();
-        query.parse(args);
+        try {
+           query.parse(args);
+        } catch (ParseError pe) {
+           context.out.println("{ \"error\": \"parm-parse-error\", \"message\":\"" + pe.getMessage() + "\"}");
+           context.exit(2);
+           return;
+        }
         // Stripped out the JSON option, and only return JSON
         // Removed Help and JDK VM options
         
@@ -46,6 +52,7 @@ public class JMXQuery {
         } catch (IOException ioe) {
             context.out.println("{ \"error\": \"connection-error\", \"message\":\"" + ioe.getMessage() + "\"}");
             context.exit(2);
+            return;
         }
 
         // Process Query
@@ -72,11 +79,11 @@ public class JMXQuery {
         } catch (Exception e) {
             context.out.println("{ \"error\": \"general-exception\", \"message\":\"" + e.getMessage() + "\"}");
             context.exit(2);
+        } finally
+        {
+            query.connector.disconnect();
         }
-
-        // Disconnect from JMX Cleanly
-        query.connector.disconnect();
-
+        return;
     }
 
     /**

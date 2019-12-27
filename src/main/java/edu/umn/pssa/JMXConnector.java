@@ -95,11 +95,14 @@ public class JMXConnector {
      *
      * @throws IOException
      */
-    public void disconnect() throws IOException {
-        if (connector != null) {
-            connector.close();
-            connector = null;
-        }
+    public void disconnect() {
+        try {
+           if (connector != null) {
+               connector.close();
+               connector = null;
+           }
+        } catch (IOException ignore) { }
+        return;
     }
 
     /**
