@@ -90,4 +90,12 @@
       </plugins>
     </pluginManagement>
   </build>
+
+  <distributionManagement>
+   <repository>
+     <id>github</id>
+     <name>GitHub UMN-PeopleSoft Apache Maven Packages</name>
+     <url>https://maven.pkg.github.com/UMN-PeopleSoft/JMXQuery</url>
+   </repository>
+  </distributionManagement>
 </project>
